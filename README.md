@@ -10,7 +10,7 @@ is Aloha-editor based WYSIWYG Wiki editor plugin for Redmine. It's currently in 
 4. Restart Redmine: `touch tmp/restart.txt` _(don't forget to be in the root redmine directory when doing this)_
 5. From now on you'll be able to chose WYSIWYG editor when editing Wiki page, no settings required
 
-**NOTE:**_Probably plugin is incompatible with your current WYSIWYG plugins so be sure to uninstall/deactivate them_
+**NOTE:** _Probably plugin is incompatible with your current WYSIWYG plugins so be sure to uninstall/deactivate them_
 
 # Usage
 
@@ -25,6 +25,7 @@ When in WYSIWYG mode you can always return to Textile mode by pressing link in t
 # Limitations
 
 Aloha editor currently lacks of some features:
+
 1. Can't underline
 2. Can't add natively wiki link
 3. Can't add natively redmine stored image
@@ -39,7 +40,9 @@ Another limitation already mentioned above and **most critical** for now - you s
 # Disclaimer
 
 Plugin provided "as is" under copyleft license and it'll always be like this.
+
 Plugin is tested only for Redmine v.1.4. There is no guarantee that it would work for other versions of Redmine.
+
 I'm real newbie to Ruby, Rails, Redmine and not doing well with HTML things so you may find some ugly things within code. A good advice is always welcomed.
 
 # Word of thanks
