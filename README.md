@@ -1,6 +1,6 @@
 # redmine_aloha_wiki
 
-is Aloha-editor based WYSIWYG Wiki editor plugin for Redmine. It's currently in early test stage. Known issues are listed below.
+is [Aloha-editor](http://aloha-editor.org) based WYSIWYG Wiki editor plugin for Redmine. It's currently in early test stage. Known issues are listed below.
 
 # Installation
 
