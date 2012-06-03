@@ -1,0 +1,5 @@
+# English strings go here for Rails i18n
+en:
+  label_textile_editor: "Textile Editor (don't forget to press before saving otherwise you'll lose changes from WYSIWYG)"
+  label_wysiwyg_editor: "WYSIWYG Editor"
+

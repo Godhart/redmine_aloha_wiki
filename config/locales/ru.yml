@@ -1,0 +1,5 @@
+# Russian strings go here for Rails i18n
+en:
+  label_textile_editor: "Редактор Textile (не забывайте нажимать перед записью, иначе вы потеряете изменения, сделанные в ВУСИВУГе)"
+  label_wysiwyg_editor: "Редактор WYSIWYG"
+

@@ -1,0 +1,15 @@
+<%= if params.has_key?(:cleanview)==false then
+  html='fieldset class="preview"><legend>'+l(:label_preview)+'</legend'
+  tag(html)
+end
+%>
+<%= if params.has_key?(:cleanview)==false then
+  textilizable @text, :attachments => @attachements, :object => @previewed
+else
+  textilizable_wysiwyg @text, :attachments => @attachements, :object => @previewed
+end
+%>
+<%= if params.has_key?(:cleanview)==false then
+  tag('/fieldset')
+end
+%>

@@ -1,0 +1,169 @@
+<!-- 
+Nikolay Gniteev (c) 2012 (godhart@gmail.com)
+
+Requires REDMINE_CONV_HTMLTOTEXTILE plugin (...)
+-->
+
+<%= wiki_page_breadcrumb(@page) %>
+
+<h2><%= h @page.pretty_title %></h2>
+
+<% form_for :content, @content,
+            :url => {:action => 'update', :id => @page.title},
+            :html => {:method => :put, :multipart => true, :id => 'wiki_form'} do |f| %>
+<%= f.hidden_field :version %>
+<% if @section %>
+<%= hidden_field_tag 'section', @section %>
+<%= hidden_field_tag 'section_hash', @section_hash %>
+<% end %>
+<%= error_messages_for 'content' %>
+
+<div id="textiletowysiwyg">
+   <%= link_to_remote l( :label_wysiwyg_editor),
+                       { :url => { :controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title, :cleanview => 1 },
+                         :method => :post,
+                         :update => 'editor',
+                         :with => "Form.serialize('wiki_form')",
+                         :success => "toggleEditor('wysiwyg')"
+                       }, :id => "textiletowysiwyg_link" %>
+</div>
+<div id="wysiwygtotextile">
+   <%= link_to_remote l( :label_textile_editor),
+                       { :url => { :controller => 'convert', :action => 'htmltotextile', :project_id => @project, :id => @page.title },
+                         :method => :post,
+                         :update => 'content_text',
+                         :with => 'htmltotextile_request(document.getElementById("editor").innerHTML)',
+                         :success => "toggleEditor('textile')"
+                       }, :id => "wysiwygtotextile_link" %>
+</div>
+
+<div id="save"><%= submit_tag l(:button_save) %></div>
+
+<div id="editor" class="wiki" contenteditable="true" spellcheck="true"></div>
+
+<div class="box tabular">
+<div id="textilebox">
+<%= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25, :class => 'wiki-edit', :accesskey => accesskey(:edit) %>
+</div>
+
+<% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
+  <% fields_for @page do |fp| %>
+    <p>
+      <label><%= l(:field_parent_title) %></label>
+      <%= fp.select :parent_id, "<option value=''></option>" + wiki_page_options_for_select(@wiki.pages.all(:include => :parent) - @page.self_and_descendants, @page.parent) %>
+    </p>
+  <% end %>
+<% end %>
+
+<p><label><%= l(:field_comments) %></label><%= f.text_field :comments, :size => 120 %></p>
+<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+</div>
+<%= wikitoolbar_for 'content_text' %>
+<% end %>
+
+<div id="showpreview">
+   <%= link_to_remote l( :label_preview),
+                       { :url => { :controller => 'wiki', :action => 'preview', :project_id => @project, :id => @page.title },
+                         :method => :post,
+                         :update => 'preview',
+                         :with => "Form.serialize('wiki_form')",
+                         :complete => "Element.scrollTo('preview')"
+                       }, :accesskey => accesskey(:preview), :id => "showpreview_link" %>
+</div>
+
+<div id="preview" class="wiki">
+</div>
+
+<!-- Scripts Goes Here -->
+
+<script type="text/javascript">
+  //Initialy hide WYSIWYG section and link to textile editor
+  toggleHidden('editor', true);
+  toggleHidden('wysiwygtotextile', true);
+  //align('textiletowysiwyg','wysiwygtotextile'); //TODO: function is not working yet so it's commented just for case if it makes fuss I can't see (see below function definition for details)
+</script>
+
+<script type="text/javascript">
+Aloha.ready( function() {
+    Aloha.jQuery('#editor').aloha();
+});
+</script>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag 'scm' %>
+  <%= robot_exclusion_tag %>
+
+  <%= stylesheet_link_tag('../javascripts/aloha/css/aloha.css', :plugin => 'redmine_aloha_wiki') %>
+  <%= javascript_include_tag('/aloha/lib/aloha.js', :plugin => 'redmine_aloha_wiki').sub('>', ' data-aloha-plugins="common/format,common/list,common/image,common/link">') %>
+
+<script type="text/javascript">
+  var saved_sizes={};
+  function toggleHiddenSize(element, value) {
+    var el = document.getElementById(element);
+    if(value == false) {
+      el.style.height=saved_sizes.element;
+      el.style.visibility = "visible";
+    }
+    else {
+      saved_sizes.element=el.style.height;
+      el.style.visibility = "hidden";
+      el.style.height=0;
+    }
+  }
+
+  function toggleHidden(element, value) {
+    var el = document.getElementById(element);
+    if(value == false) {
+      el.style.visibility = "visible";
+    }
+    else {
+      el.style.visibility = "hidden";
+    }
+  }
+
+  function align(element1, element2) {
+    var el1 = document.getElementById(element1);
+    var el2 = document.getElementById(element2);
+    //#TODO: it doesn't works for some reason
+    el2.style.left=el1.style.left;
+    el2.style.top=el1.style.top;
+  }
+
+  function clean(element) {
+    var el = document.getElementById(element);
+    el.innerHTML = ""
+  }
+
+  function toggleEditor(type) {
+    if (type=='textile') {
+      toggleHidden('wysiwygtotextile', true);
+      toggleHidden('editor',true);
+      clean('editor');
+      toggleHidden('preview',false);
+      toggleHidden('showpreview',false);
+      toggleHiddenSize('textilebox',false);
+      toggleHidden('textiletowysiwyg',false);
+      Element.scrollTo('textilebox');
+      $('wiki_form').reset();
+    }
+    else {
+      toggleHidden('textiletowysiwyg', true);
+      toggleHiddenSize('textilebox',true);
+      clean('preview');
+      toggleHidden('preview',true);
+      toggleHidden('showpreview',true);
+      toggleHidden('editor',false);
+      toggleHidden('wysiwygtotextile',false);
+      Element.scrollTo('editor');
+    }
+    return 0;
+  }
+
+  function htmltotextile_request(text) {
+    return 'content%5Btext%5D='+encodeURIComponent(text);
+  }
+</script>
+
+<% end %>
+
+<% html_title @page.pretty_title %>

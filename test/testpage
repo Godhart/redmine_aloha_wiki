@@ -1,0 +1,143 @@
+{{toc}}
+
+h1. About this page
+
+This page is intended for WYSIWYG tests. It contains features to test and also it contains TODO list.
+To test all features presented on this pages by yourself (using Redmine of course) you'll need to add project objects, referenced from this page (see wikis and images links below)
+
+There is three subjects of concern in this WYSIWYG plugin:
+# *WYSIWYG content* is made right by native Redmine engine (used version 1.4 code with just a little tuning) so it looks like it would actually look after publishing.
+# *WYSIWYG editor* features are all about "Aloha-editor":http://aloha-editor.org and it's plugins capabilities. It's lacks some functionality yet (see TODOs below) but basics do fine.
+It's a main source of WYSIWYG score.
+# *HTML to textile conversion* as WYSIWYG editor operates with HTML code. It's done on server side by a "special conversion plugin":https://github.com/Godhart/redmine_conv_htmltotextile.
+The less textile content changes when toggling editor textile->WYSIWYG->textile, the greater overall WYSIWYG score is.
+
+h2. Head Tag
+
+Generic Head Tag: <h\d>, but 1-6 levels used only
+
+h3. Header 3
+
+h4. Header 4
+
+h5. Header 5
+
+h6. Header 6
+
+h2. Formating and TOC
+
+*Bold* Tag: <srtong> _*NOTE:* HTML conversion engine also uses <b> tag to avoid Bold/Strong ambiguity made by WYSIWYG_
+
+_Italic_ Tag: <em> _*NOTE:* HTML conversion engine also uses <i>  tag to avoid Emphasis/Italic ambiguity made by WYSIWYG_
+
++Underline+ Tag: <ins>
+
+-Deleted- Tag: <del> _*NOTE:* HTML conversion engine also uses <s> and <strike> tags as WYSIWYG uses them instead_
+
+??Quote?? Tag: <cite>
+
+Sub/super script: How about ^this^ and ~that~ ?
+
+@Inline Code@ Tag: <codE>, Ignore other inner tags (that could come from Coderay et.c) *TODO:* <codE> tag to @ for single liners
+
+<pre> Tag: <prE>, Ignore other inner tags (that could come from Coderay et.c)
+Preformated
+</pre>
+
+|Table|Check|Here|
+|1|Complete|Row|
+|2|Incomplete|
+
+* Bullet List
+** A deeper level
+## Much more deeper 
+Group tag: <ul>
+Item tag: <li>
+
+# Enumerated List
+## A deeper level
+** Much more deeper
+Group tag: <ol>
+Item tag: <li>
+
+p>. Right Aligned Paragraph Tag: <p style="text-align:right
+
+p=. Center Aligned Paragraph Tag: <p style="text-align:center
+
+{{toc}}
+
+Left aligned Toc Tag: <ul class="toc">, Totaly ignore content
+_*NOTE:* since textilizable_wysiwyg is in use no need for processing this tag, but support for this still remains in the html-to-textile conversion engine_
+
+{{>toc}}
+
+Right aligned Toc Tag: <ul class="toc right">, Totaly ignore content
+_*NOTE:* since textilizable_wysiwyg is in use no need for processing this tag, but support for this still remains in the html-to-textile conversion engine_
+
+h2. Links tests goes below
+
+godhart@gmail.com
+
+http://www.google.com Tag:<a class="external
+"Link":http://a.link.com Link with alternate text Tag:<a class="external
+
+[[a_link_to_wiki|Wiki link]] Tag:<a class="wiki-page
+[[Test2:a_link_to_outer_wiki|Outer Wiki link]] Tag:<a class="wiki-page. *NOTE:* you should have 'test2' project to see this working
+
+[[a_link_to_wiki#a1|Anchored Wiki link]] Tag:<a class="wiki-page
+[[Test2:a_link_to_outer_wiki#a2|Anchored Outer Wiki link]] Tag:<a class="wiki-page. *NOTE:* you should have 'test2' project to see this working
+
+BALLOON(That's how balloons works - need ACRONYM)
+
+"balloon link (it's balloon)":http://balloon.com Balloon for http link is made by putting (blablabla) within alternate text. That's balloon is identified by 'title' tag within <a href= ... tag
+
+[[Test2:Wiki#Anchor|Wiki BALLOON(Balloon!)]] That balloon within WIKI link is about ACRONYM too *TODO:* anymore balloons?
+
+http://www.ballon.com (try to do another one balloon) *TODO:* Is there a way do balloons just like this?
+
+Issue #12 Tag: *TODO:* Check that it still works
+
+Revision r43 Tag: *TODO:* Check that it still works
+
+commit:f30e13e43 Tag: *TODO:* Check that it still works
+
+source:some/file Tag: *TODO:* Check that it still works
+
+Wiki Image !image! Tag: <img alt="" src="image">
+Wiki Image with !image(alternate text)! Tag: <img alt="alternate text" src="image">
+
+External Image !http://ext.image! Tag: <img alt="" src="http://ext.image">
+External Image with !http://ext.image(alternate text)! Tag: <img alt="alternate text" src="http://ext.image">
+
+{{include(includetest)}}
+_*NOTE:* it's impossible to process this in html-to-textile conversion engine with current approach to WYSIWYG content generation, but since textilizable_wysiwyg is in use there is no need anymore for processing this at all_
+
+h2. HTML Conversion engine TODO
+
+* check all anchors processing
+** seems to be done - just do some tests
+* bold/italic/etc within word. Mine redmine can't do this. And Yours?
+* formated blocks like this one: _*bold within italic* just italic_ are failed (italic disappears after textile->wysiwyg->textile)
+
+h2. WYSIWYG Editor engine TODO
+
+* Aloha wiki currently lacks of some features like those listed below. They are to be added into aloha (soon or later)
+** underline
+** wiki link
+** wiki image
+** quote
+** code
+** remove ambiguous Bold/Strong Italic/Emphasis buttons from menu
+** alignment (It has it but won't works for me). P.S.: probably that is required least
+** abbreviation (I call it Balloon on this page as it pop-ups like this in my browser :) ).
+P.S.: Actually it's there in Aloha but need to tune html-to-textile conversion engine to make it work
+
+* As WYSIWYG is currently in test stage it's required to convert to textile before saving
+** Link to convert to textile is located on top of page. It would be nice to have conversion button on WYSIWYG editor menu
+
+h2. Other TODO
+
+* TODOs that are scattered within text on that page
+* Backspace doesn't works when Aloha is turned on for some reason (works fine with just html5 contenteditable)
+** check previous or newer versions - example on http://aloha-editor.org/ have no such issues
+
